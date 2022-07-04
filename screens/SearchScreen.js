@@ -2,69 +2,65 @@ import React, {useMemo, useState} from 'react';
 import {StyleSheet, Text, View, TextInput, FlatList} from "react-native";
 import images from '../images';
 import ImageItem from "../components/ImageItem";
+import {Ionicons} from "@expo/vector-icons";
+import {ScrollView} from "react-native";
 
 const SearchScreen = () => {
     let[searchIsNone, setSearchIsNone] = useState(false);
     const [searchText, setSearchText] = useState('');
     const addSearch = (value) => setSearchText(value);
     const searchImages = useMemo(() => {
-        const filtered =  images.filter((e)=> e.title.toLowerCase().includes(searchText.toLowerCase()));
-        // if(filtered.length === 0) {
-        //     setSearchIsNone(!searchIsNone);
-        // }
-        return filtered
-
+        return images.filter((e)=> e.title.toLowerCase().includes(searchText.toLowerCase()))
     },[searchText, images]);
     return (
-        <View style={styles.search}>
-          <View style={style.searchBody}>
-              <TextInput placeholder="Search..."
-                         value={searchText}
-                         onChangeText={addSearch}
-              style={styles.input}
-              />
-              <FlatList data={searchImages}
-                        scrollEventThrottle={32}
-                        renderItem={ ({item}) => <ImageItem item={item}/> }
-                        vertical
-                        showsVerticalScrollIndicator={false}
-                        bounces={false}
-                        keyExtractor={(item) => item.id}
-              />
+        <ScrollView style={styles.search}>
+          <View style={styles.searchBody}>
+              <View style={styles.searchAction}>
+                  <TextInput placeholder="Enter the title"
+                             value={searchText}
+                             onChangeText={addSearch}
+                             style={styles.input}
+                  />
+                  <Ionicons name="search-outline" size={25} color="#493d8a" />
+              </View>
+              {
+               !searchIsNone
+                   ?
+                   searchImages.map((item,id) => <ImageItem item={item} key={item.id}/> )
+                   :
+                   <Text>
+                       The Image with this title was not found
+                   </Text>
 
+
+              }
           </View>
-        </View>
+        </ScrollView>
     );
 };
 
 
 const styles = StyleSheet.create({
     search: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: 'center'
+       width: '100%',
+
     },
     searchBody:{
         alignItems: 'center',
     width: '100%',
     },
     input:{
-        width: '80%',
-        padding: 15,
-        borderRadius: 7,
-        marginVertical: 20,
-        shadowColor: "#aeaeae",
-        shadowOffset: {
-            width: 0,
-            height: 0,
-            blur: 3,
+        width: '70%',
+        paddingVertical: 10,
 
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-        borderWidth: 0,
 },
-
+    searchAction:{
+        width: "100%",
+        flexDirection: 'row',
+        marginVertical: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 
 })
 

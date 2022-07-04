@@ -28,8 +28,8 @@ app.post('/api/upload', upload.array('photo', 3), (req, res) => {
     });
 });
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3001, () => {
     console.log(
-        `server is running at http://localhost:${process.env.PORT || 3000}`
+        `server is running at http://localhost:${process.env.PORT || 3001}`
     );
 });
